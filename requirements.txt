@@ -1,0 +1,8 @@
+# Requirements for Google Cloud Run
+Flask==2.0.1
+gunicorn==20.1.0
+# Requirements for the service body
+fastbook==0.0.18
+google-cloud-storage==1.42.1
+numpy==1.15
+spacy==3.3.1
