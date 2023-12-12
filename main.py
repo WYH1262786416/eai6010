@@ -43,16 +43,10 @@ def classify_article( ):
         return response
 
 
-@functools.lru_cache( maxsize = 1 ) # cache and use the first call result
-def _load_classifier( ):
-    """ Loads the classifier and uses the lru_cache to do it once. """
-
-    #   Download the model from cloud storage to the container’s local disk
-    blob = storage_client.bucket( "classifier-model-3" ).get_blob( "news_category_classifier" )
-    blob.download_to_filename( "/tmp/model.pkl" )
-
-    #   Load the classifier from disk and return it
-    classifier = load_learner( "/tmp/model.pkl" )
+@functools.lru_cache( maxsize = 1 )
+def _load_classifier():
+    """ Loads the classifier from the local file system. """
+    classifier = load_learner("model.pkl") 
     return classifier
 
 
