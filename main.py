@@ -22,12 +22,11 @@ def classify_article( ):
     #   Classify the input normally
     request_json = request.get_json( )
     headline = request_json.get( "headline", None )
-    short_description = request_json.get( "shortDescription", None )
-    if headline is not None and short_description is not None:
+    if headline is not None:
 
         #   Make the prediction
-        content = f"{headline} \n {short_description}"
-        prediction, prediction_possibility, prediction_possibilities = classifier.predict( content )
+        content = f"{headline}"
+        prediction = classifier.predict( content )[0]
 
         #   Build the response
         response_json = { "predictedClass": prediction }
@@ -37,7 +36,7 @@ def classify_article( ):
 
     #   We are missing content, complain to the user
     else:
-        response_json = { "message": "headline and shortDescription are required to make a class prediction" }
+        response_json = { "message": "headline are required to make a class prediction" }
         response_json_string = json.dumps( response_json )
         response = Response( response_json_string,  mimetype='application/json' )
         return response
