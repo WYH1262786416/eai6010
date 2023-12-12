@@ -1,13 +1,12 @@
 from fastai.text.all import *
 from flask import Flask, request, Response
 import functools
-from google.cloud import storage
+import pickle
 import json
 import os
 
 
 app = Flask( __name__ )
-storage_client = storage.Client( )
 
 
 @app.route( "/classify", methods = [ "POST" ] ) # when I post to the {base}/classify URL I call this function
@@ -45,7 +44,8 @@ def classify_article( ):
 @functools.lru_cache( maxsize = 1 )
 def _load_classifier():
     """ Loads the classifier from the local file system. """
-    classifier = load_learner("model.pkl") 
+    with open('model.pkl', 'rb') as file:
+        classifier = pickle.load(file)
     return classifier
 
 
