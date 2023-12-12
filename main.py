@@ -1,10 +1,11 @@
-from fastai.text.all import *
+#from fastai.text.all import *
 from flask import Flask, request, Response
 import functools
 import pickle
 import json
 import os
 
+from sklearn.feature_extraction.text import CountVectorizer
 
 app = Flask( __name__ )
 
@@ -25,7 +26,11 @@ def classify_article( ):
 
         #   Make the prediction
         content = f"{headline}"
+        with open('vectorizer.pkl', 'rb') as file:
+            loaded_vectorizer = pickle.load(file)
+        content = loaded_vectorizer.transform([content]).toarray()
         prediction = classifier.predict( content )[0]
+        print(prediction)
 
         #   Build the response
         response_json = { "predictedClass": prediction }
